@@ -42,6 +42,8 @@ impl SuitSkin {
     }
 }
 
+pub const KATEX_SUITS_FONT_STR: &str = "KaTeX_Suits";
+
 const COLOR_AMBER: [&str; 2] = ["#b70", "#ffb433"];
 const COLOR_GREEN: [&str; 2] = ["#062", "#00ff55"];
 const COLOR_BLUE: [&str; 2] = ["#00d", "#aaaaff"];
