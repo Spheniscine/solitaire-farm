@@ -4,8 +4,11 @@ pub use card::*;
 mod skin;
 pub use skin::*;
 
-// mod board;
-// pub use board::*;
+mod bitmask;
+pub use bitmask::*;
+
+mod board;
+pub use board::*;
 
 // mod game;
 // pub use game::*;
