@@ -7,6 +7,9 @@ pub use skin::*;
 mod farm_structs;
 pub use farm_structs::*;
 
+mod crop_group_shapes;
+pub use crop_group_shapes::*;
+
 mod board;
 pub use board::*;
 
@@ -15,3 +18,5 @@ pub use board::*;
 
 // mod settings;
 // pub use settings::*;
+
+// mod test;

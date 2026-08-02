@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(transparent)]
-pub struct BitMask(u16);
+pub struct BitMask(pub u16);
 impl Iterator for BitMask {
     type Item = usize;
  

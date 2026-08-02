@@ -15,6 +15,9 @@ serde_tuple = "1.1.3"
 strum = "0.28.0"
 strum_macros = "0.28.0"
 
+[build-dependencies]
+serde = "1.0.229"
+
 [features]
 default = ["web"]
 web = ["dioxus/web"]

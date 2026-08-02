@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize, de::Visitor};
-use strum::{EnumCount, IntoEnumIterator};
+use strum::EnumCount;
 use strum_macros::{EnumCount, EnumIter};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, EnumCount, EnumIter)]
