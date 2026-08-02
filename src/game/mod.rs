@@ -4,8 +4,8 @@ pub use card::*;
 mod skin;
 pub use skin::*;
 
-mod bitmask;
-pub use bitmask::*;
+mod farm_structs;
+pub use farm_structs::*;
 
 mod board;
 pub use board::*;

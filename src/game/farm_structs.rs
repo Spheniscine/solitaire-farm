@@ -22,3 +22,19 @@ impl BitMask {
         Self(self.0 ^ (1 << x))
     }
 }
+
+pub const FARM_HEIGHT: usize = 3;
+pub const FARM_WIDTH: usize = 3;
+pub const NUM_FARM_PLOTS: usize = FARM_HEIGHT * FARM_WIDTH;
+
+/// to row-column coordinates
+pub fn to_farm_coords(x: usize) -> (usize, usize) {
+    assert!(x < NUM_FARM_PLOTS);
+    (x / FARM_WIDTH, x % FARM_WIDTH)
+}
+
+/// from row-column coordinates
+pub fn from_farm_coords(r: usize, c: usize) -> usize {
+    assert!(r < FARM_HEIGHT && c < FARM_WIDTH);
+    r * FARM_WIDTH + c
+}

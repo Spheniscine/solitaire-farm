@@ -5,7 +5,7 @@ use serde_tuple::{Deserialize_tuple, Serialize_tuple};
 use strum::{IntoEnumIterator, VariantArray};
 use strum_macros::{EnumIter, VariantArray};
 
-use crate::game::{BitMask, Card};
+use crate::game::{BitMask, Card, NUM_FARM_PLOTS};
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, EnumIter, VariantArray)]
 #[repr(u8)]
@@ -31,7 +31,7 @@ impl DepotRole {
         match self {
             DepotRole::Tableau => 4,
             DepotRole::FreeCell => 1,
-            DepotRole::Farm => 9,
+            DepotRole::Farm => NUM_FARM_PLOTS,
             DepotRole::Market => 1,
         }
     }
