@@ -41,7 +41,7 @@ pub fn BoardComponent(
     let farm_h = (card_height + spacer_y) * FARM_HEIGHT as f32 + spacer_y;
     let farm_pos = Vec2::new(
         100. - start_x - farm_w,
-        tableau_y
+        tableau_y + spacer_y
     );
 
     let column_card_offset = Vec2::new(0., 6.5);
@@ -164,6 +164,16 @@ pub fn BoardComponent(
             top: rem(position.y),
             left: rem(position.x),
 
+            div {
+                position: "absolute",
+                top: rem(farm_pos.y),
+                left: rem(farm_pos.x),
+                width: rem(farm_w),
+                height: rem(farm_h),
+                background_color: "#530",
+                border_radius: rem(card_width * CARD_BORDER_RADIUS_RATIO),
+            },
+
             for depot in 0..NUM_DEPOTS {
                 if let Some(hint) = get_hint(depot) {
                     CardFrame { 
@@ -194,7 +204,7 @@ pub fn BoardComponent(
                     CardComponent { 
                         position: get_pos(depot, i),
                         width: card_width,
-                        card: board.depots[depot][i],
+                        card: if is_face_up(depot) {board.depots[depot][i]},
                         // number_hint: if !is_face_up(depot) {i + 1},
                         skin,
                         onclick: move |_| {

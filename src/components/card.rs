@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::rem, game::ColorMode};
+use crate::{components::rem, game::{ColorMode, KATEX_SUITS_FONT_STR}};
 
 pub trait SkinTrait<C>: PartialEq + Clone {
     fn get_color(&self, card: &C, mode: ColorMode) -> String;
@@ -17,7 +17,7 @@ pub const CARD_BORDER_RADIUS_RATIO: f32 = 1.5 / 12.;
 pub fn CardComponent<C: PartialEq + Clone + 'static, S: SkinTrait<C> + 'static>(
     position: Vec2,
     width: f32,
-    card: C,
+    card: Option<C>,
     skin: S,
 
     number_hint: Option<usize>,
@@ -31,31 +31,82 @@ pub fn CardComponent<C: PartialEq + Clone + 'static, S: SkinTrait<C> + 'static>(
         rem(x * pt)
     };
 
-    rsx! {
-        div {
-            style: "place-items: center;",
-            position: "absolute",
-            top: rem(position.y),
-            left: rem(position.x),
-            background_color: "#fff",
-            width: pt(11.),
-            height: pt(12.),
-            border: "{pt(0.25)} solid #000",
-            border_radius: rem(width * CARD_BORDER_RADIUS_RATIO),
-            display: "grid",
-            grid_template_columns: "50% 50%",
-            grid_template_rows: "50% 50%",
-            font_size: pt(4.75), // slightly smaller than the 5 point set in most other games
-            text_align: "center",
-            padding: pt(0.25),
-            color: skin.get_color(&card, ColorMode::Dark),
+    if let Some(card) = &card {
+        rsx! {
+            div {
+                style: "place-items: center;",
+                position: "absolute",
+                top: rem(position.y),
+                left: rem(position.x),
+                background_color: "#fff",
+                width: pt(11.),
+                height: pt(12.),
+                border: "{pt(0.25)} solid #000",
+                border_radius: rem(width * CARD_BORDER_RADIUS_RATIO),
+                display: "grid",
+                grid_template_columns: "50% 50%",
+                grid_template_rows: "50% 50%",
+                font_size: pt(4.75), // slightly smaller than the 5 point set in most other games
+                text_align: "center",
+                padding: pt(0.25),
+                color: skin.get_color(&card, ColorMode::Dark),
 
-            onclick, ondoubleclick,
+                onclick, ondoubleclick,
 
-            div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_rank(&card)}},
-            div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_suit(&card)}},
-            div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_suit(&card)}},
-            div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_rank(&card)}},
+                div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_rank(&card)}},
+                div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_suit(&card)}},
+                div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_suit(&card)}},
+                div { display: "flex", align_items: "center", pointer_events: "none", {skin.render_rank(&card)}},
+            }
+        }
+    } else {
+        rsx! {
+            div {
+                style: "--card-width: {pt(11.)}",
+                div {
+                    style: "place-items: center;",
+                    position: "absolute",
+                    top: rem(position.y),
+                    left: rem(position.x),
+                    background_color: "#fff",
+                    width: pt(11.),
+                    height: pt(12.),
+                    border: "{pt(0.25)} solid #000",
+                    border_radius: rem(width * CARD_BORDER_RADIUS_RATIO),
+                    padding: pt(0.25),
+                    display: "grid",
+                    onclick, ondoubleclick,
+
+                    div {
+                        class: "card-pattern-1",
+                        position: "relative",
+                        width: pt(10.75),
+                        height: pt(11.75),
+                        border_radius: pt(1.),
+                        display: "flex",
+                        justify_content: "center",
+                        align_items: "center",
+
+                        if let Some(number_hint) = number_hint {
+                            div {
+                                background: "rgba(192, 192, 192, 0.75)",
+                                // position: "absolute",
+                                // bottom: pt(0.5),
+                                border_radius: pt(1.),
+                                color: "#000",
+                                font_family: KATEX_SUITS_FONT_STR,
+                                font_size: pt(4.),
+                                height: pt(4.5),
+                                display: "flex",
+                                align_items: "center",
+                                padding: "{pt(0.25)} {pt(0.75)}",
+                                "{number_hint}",
+                            }
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
