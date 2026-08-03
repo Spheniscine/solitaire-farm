@@ -54,9 +54,9 @@ pub fn BoardComponent(
             DepotRole::FreeCell => 
                 Vec2::new(start_x, start_y),
             DepotRole::Farm => {
-                let (i, j) = to_farm_coords(index);
-                Vec2::new(farm_pos.x + spacer_x + (card_width + spacer_x) * i as f32,
-                    farm_pos.y + spacer_y + (card_height + spacer_y) * j as f32)
+                let (r, c) = to_farm_coords(index);
+                Vec2::new(farm_pos.x + spacer_x + (card_width + spacer_x) * c as f32,
+                    farm_pos.y + spacer_y + (card_height + spacer_y) * r as f32)
             },
             DepotRole::Market => 
                 Vec2::new(market_x, start_y),
