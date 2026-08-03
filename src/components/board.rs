@@ -41,7 +41,7 @@ pub fn BoardComponent(
     let farm_h = (card_height + spacer_y) * FARM_HEIGHT as f32 + spacer_y;
     let farm_pos = Vec2::new(
         100. - start_x - farm_w,
-        tableau_y + spacer_y
+        tableau_y + 6.
     );
 
     let column_card_offset = Vec2::new(0., 6.5);
