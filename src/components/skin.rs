@@ -25,7 +25,7 @@ impl SkinTrait<Card> for Skin {
                 if rank != 0 {
                     span {
                         font_family: "'Noto Sans'", // KaTeX sign symbols are too large
-                    if rank > 0 {"+"} else {"‒"} // "figure dash is used, as it renders to match the plus sign"
+                    if rank > 0 {"+"} else {"−"} 
                     }
                 }
                 span {

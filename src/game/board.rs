@@ -5,7 +5,7 @@ use serde_tuple::{Deserialize_tuple, Serialize_tuple};
 use strum::{IntoEnumIterator, VariantArray};
 use strum_macros::{EnumIter, VariantArray};
 
-use crate::game::{BitMask, Card, NUM_FARM_PLOTS};
+use crate::game::{BitMask, Card, DECK_SIZE, NUM_FARM_PLOTS};
 
 #[derive(Copy, Clone, Serialize, Deserialize, Debug, PartialEq, Eq, EnumIter, VariantArray)]
 #[repr(u8)]
@@ -63,9 +63,13 @@ impl DepotRole {
         Self::role_and_subindex(i).map(|x| x.0)
     }
 
-    // pub fn id(self, i: usize) -> usize {
-    //     self.offset() + i
-    // }
+    pub fn id(self, i: usize) -> usize {
+        self.offset() + i
+    }
+
+    pub fn is_face_up(self) -> bool {
+        self != DepotRole::Market
+    }
 }
 
 #[derive(Copy, Clone, Serialize_tuple, Deserialize_tuple, Debug, PartialEq, Eq)]
@@ -97,4 +101,44 @@ pub struct Board {
     pub depots: Vec<Vec<Card>>,
     pub selected: Option<Selection>,
     pub animation_acts: Vec<AnimationAct>,
+}
+
+impl Board {
+    pub fn empty() -> Self {
+        Self {
+            depots: vec![vec![]; NUM_DEPOTS],
+            selected: None,
+            animation_acts: vec![],
+        }
+    }
+
+    pub fn from_deal(deal: &[Card]) -> Self {
+        use DepotRole::*;
+        assert_eq!(deal.len(), DECK_SIZE);
+
+        let mut res = Self::empty();
+        for (&card, depot) in deal.iter().zip(std::iter::repeat(Tableau.range()).flatten()) {
+            res.depots[depot].push(card);
+        }
+
+        res
+    }
+
+    pub fn do_move(&mut self, pos1: BoardPos, pos2: BoardPos) {
+        self.selected = None;
+        let cards = self.depots[pos1.depot_index].drain(pos1.card_index ..).collect();
+        self.animation_acts.push(
+            AnimationAct::Move(cards, pos1, pos2)
+        );
+    }
+
+    pub fn advance_actions(&mut self) {
+        for act in self.animation_acts.drain(..) {
+            match act {
+                AnimationAct::Move(cards, _pos1, pos2) => {
+                    self.depots[pos2.depot_index].extend(cards);
+                },
+            }
+        }
+    }
 }

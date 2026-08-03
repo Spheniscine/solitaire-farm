@@ -1,24 +1,114 @@
+use async_std::stream::StreamExt;
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::CardComponent, game::{Card, Skin, Suit}};
+use crate::{components::{BoardComponent, CardComponent, rem}, game::{ANIMATION_DURATION, AnimationKey, Card, GameState, ScreenState, Skin, Suit}};
 
 #[component]
 pub fn Hero() -> Element {
-    let position = Vec2::new(10., 10.);
-    let width = 12f32;
-    let card = Card { rank: 3, suit: Suit::Blueberry };
-    let mut skin = Skin::default();
-    // skin.ranks = crate::game::RankSkin::From7To13;
+    let mut state = use_signal(|| {
+        // if let Some(mut state) = LocalStorage.load_game_state() {
+        //     state.board.selected = None;
+        //     state.screen_state = ScreenState::Game;
+        //     return state;
+        // }
+        GameState::init()
+    });
+
+    let confetti_counter = use_memo(move || {
+        state.read().num_wins
+    });
+    use_effect(move || {
+        let _ = confetti_counter.read();
+        document::eval("confetti();");
+    });
+
+    let st = state.read();
+    let clean = !st.is_busy(); // interactions should test this before write()-ing to state, to prevent slowdowns
+
+    let animate_timer = use_coroutine(move |mut rx: UnboundedReceiver<AnimationKey>| async move {
+        while let Some(key) = rx.next().await {
+            async_std::task::sleep(ANIMATION_DURATION).await;
+            state.write().advance_animations(key);
+        }
+    });
+
     rsx! {
         div {
             id: "hero",
+            class: "select-none",
 
-            CardComponent { 
-                position,
-                width,
-                card,
-                skin,
+            if st.screen_state == ScreenState::Game {
+                div {
+                    position: "absolute",
+                    top: rem(1.5),
+                    left: rem(2.),
+                    class: "game-button",
+                    onclick: move |_| if clean {state.write().new_game()},
+                    "New Game"
+                }
+
+                div {
+                    position: "absolute",
+                    padding: rem(1.),
+                    top: rem(9.5),
+                    left: rem(2.),
+                    font_size: rem(4.),
+                    width: rem(48.),
+                    color: "#fff",
+
+                    "Farm",
+                    br {},
+                    "Wins: {st.num_wins}",
+                }
+
+                div {
+                    position: "absolute",
+                    top: rem(1.5),
+                    right: rem(2.),
+                    class: "game-button",
+                    // onclick: move |_| if clean {state.write().screen_state = ScreenState::Settings;},
+                    "Settings"
+                }
+
+                div {
+                    position: "absolute",
+                    top: rem(1.5),
+                    right: rem(30.),
+                    class: "game-button",
+                    // class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
+                    // onclick: move |_| if clean {state.write().restart()},
+                    "Reset"
+                }
+
+                div {
+                    position: "absolute",
+                    top: rem(11.),
+                    right: rem(2.),
+                    class: "game-button",
+                    // onclick: move |_| if clean {state.write().screen_state = ScreenState::Help;},
+                    "Help"
+                }
+
+                div {
+                    position: "absolute",
+                    top: rem(11.),
+                    right: rem(30.),
+                    class: "game-button",
+                    // class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
+                    // onclick: move |_| if clean {state.write().undo()},
+                    "Undo"
+                }
+
+                BoardComponent { 
+                    position: Vec2 { x: 0., y: 20. },
+                    board: st.board.clone(),
+                    skin: st.skin,
+                    // onclick: move |pos| if clean {state.write().onclick(pos);},
+                    // ondoubleclick: move |pos| if clean {state.write().ondoubleclick(pos);},
+                    animation_key: st.animation_key,
+                    is_won: st.is_won(),
+                }
             }
         }
     }
