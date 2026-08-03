@@ -164,6 +164,7 @@ pub fn BoardComponent(
             top: rem(position.y),
             left: rem(position.x),
 
+            // farm soil decor
             div {
                 position: "absolute",
                 top: rem(farm_pos.y),
