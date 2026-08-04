@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize, de::Visitor};
 use strum::EnumCount;
 use strum_macros::{EnumCount, EnumIter};
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, EnumCount, EnumIter)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, EnumCount, EnumIter, strum_macros::Display,)]
 pub enum Suit {
     Melon, Corn, Blueberry, Eggplant
 }
