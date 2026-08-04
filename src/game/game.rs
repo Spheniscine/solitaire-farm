@@ -173,6 +173,7 @@ impl GameState {
                     let Some((role, index)) = DepotRole::role_and_subindex(depot) else { return };
                     match role {
                         DepotRole::Farm => {
+                            if self.board.depots[depot].is_empty() { return; }
                             mask = mask.flip(index);
                             if mask.is_empty() {
                                 self.board.selected = None;
