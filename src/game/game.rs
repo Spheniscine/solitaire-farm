@@ -4,7 +4,7 @@ use rand::{Rng, seq::SliceRandom};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::{components::LocalStorage, game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANKS_PER_SUIT, Selection, Skin, Suit, is_crop_group_shape}};
+use crate::{components::LocalStorage, game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANKS_PER_SUIT, Selection, SettingsState, Skin, Suit, is_crop_group_shape}};
 
 pub const ANIMATION_DURATION: Duration = Duration::from_millis(200);
 pub type AnimationKey = u16;
@@ -268,5 +268,18 @@ impl GameState {
 
     pub fn clear_selection(&mut self) {
         self.board.selected = None;
+    }
+
+    pub fn new_settings_state(&self) -> SettingsState {
+        SettingsState {
+            allow_undo: self.allow_undo,
+            skin: self.skin,
+        }
+    }
+
+    pub fn apply_settings(&mut self, settings: &SettingsState){
+        self.allow_undo = settings.allow_undo;
+        self.skin = settings.skin;
+        LocalStorage.save_game_state(&self);
     }
 }
