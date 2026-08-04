@@ -2,16 +2,16 @@ use async_std::stream::StreamExt;
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{BoardComponent, CardComponent, rem}, game::{ANIMATION_DURATION, AnimationKey, Card, GameState, ScreenState, Skin, Suit}};
+use crate::{components::{BoardComponent, CardComponent, EMOJI_MAP, LocalStorage, rem}, game::{ANIMATION_DURATION, AnimationKey, Card, GameState, ScreenState, Skin, Suit}};
 
 #[component]
 pub fn Hero() -> Element {
     let mut state = use_signal(|| {
-        // if let Some(mut state) = LocalStorage.load_game_state() {
-        //     state.board.selected = None;
-        //     state.screen_state = ScreenState::Game;
-        //     return state;
-        // }
+        if let Some(mut state) = LocalStorage.load_game_state() {
+            state.board.selected = None;
+            state.screen_state = ScreenState::Game;
+            return state;
+        }
         GameState::init()
     });
 
@@ -79,9 +79,8 @@ pub fn Hero() -> Element {
                     position: "absolute",
                     top: rem(1.5),
                     right: rem(30.),
-                    class: "game-button",
-                    // class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
-                    // onclick: move |_| if clean {state.write().restart()},
+                    class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
+                    onclick: move |_| if clean {state.write().restart()},
                     "Reset"
                 }
 
@@ -98,9 +97,8 @@ pub fn Hero() -> Element {
                     position: "absolute",
                     top: rem(11.),
                     right: rem(30.),
-                    class: "game-button",
-                    // class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
-                    // onclick: move |_| if clean {state.write().undo()},
+                    class: if st.undo_possible() {"game-button"} else {"game-button-disabled"},
+                    onclick: move |_| if clean {state.write().undo()},
                     "Undo"
                 }
 
@@ -115,6 +113,18 @@ pub fn Hero() -> Element {
                     valid_crop_group_selected: st.valid_crop_group_selected()
                 }
             }
+
+            div {
+                id: "preloaded-images",
+
+                for asset in EMOJI_MAP.values() {
+                    img {
+                        src: *asset,
+                        width: 1,
+                        height: 1,
+                    }
+                }
+            },
         }
     }
 }

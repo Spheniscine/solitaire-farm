@@ -5,7 +5,7 @@ use rand::{Rng, seq::SliceRandom};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANKS_PER_SUIT, Selection, Skin, Suit, is_crop_group_shape};
+use crate::{components::LocalStorage, game::{BitMask, Board, BoardPos, Card, DECK_SIZE, DepotRole, RANKS_PER_SUIT, Selection, Skin, Suit, is_crop_group_shape}};
 
 pub const ANIMATION_DURATION: Duration = Duration::from_millis(200);
 pub type AnimationKey = u16;
@@ -77,7 +77,7 @@ impl GameState {
         self.history.clear();
         self.undo_stack.clear();
         self.already_won = false;
-        // LocalStorage.save_game_state(&self);
+        LocalStorage.save_game_state(&self);
     }
 
     pub fn is_busy(&self) -> bool {
@@ -113,7 +113,7 @@ impl GameState {
             // self.check_auto_moves();
         }
 
-        // if !self.is_busy() { LocalStorage.save_game_state(&self); }
+        if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
 
     pub fn valid_crop_group_selected(&self) -> bool {
@@ -241,5 +241,29 @@ impl GameState {
 
         self.undo_stack.push(history_len);
         true
+    }
+
+    pub fn undo_possible(&self) -> bool {
+        self.allow_undo && !self.undo_stack.is_empty()
+    }
+
+    pub fn undo(&mut self) {
+        if self.is_busy() || !self.undo_possible() { return; }
+        let Some(target_len) = self.undo_stack.pop() else {return};
+        while self.history.len() > target_len {
+            let rec = self.history.pop().unwrap();
+            self.board.do_move(rec.pos2, rec.pos1);
+            self.board.advance_actions(); // no animation, as repeated card moves on same card causes problems
+        }
+        LocalStorage.save_game_state(&self);
+    }
+
+    pub fn restart(&mut self) {
+        if self.history.is_empty() || !self.undo_possible() { return; }
+        self.board = Board::from_deal(&self.deal);
+        self.history.clear();
+        self.undo_stack.clear();
+
+        if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
 }
