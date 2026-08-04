@@ -168,3 +168,11 @@ button {
    height: 1px;
    width: 1px;
 }
+
+.crop-shape-reminder table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.crop-shape-reminder td {
+    padding: 0;
+}

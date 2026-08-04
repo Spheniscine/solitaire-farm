@@ -4,6 +4,118 @@ use glam::Vec2;
 use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, FARM_HEIGHT, FARM_WIDTH, NUM_DEPOTS, Selection, Skin, to_farm_coords}};
 
 #[component]
+fn CropShapeReminder(position: Vec2) -> Element {
+    let padding = 1.;
+
+    let slash = || rsx! {
+        span {
+            font_size: rem(6.),
+            padding: rem(0.5),
+            "/"
+        }
+    };
+
+    rsx! {
+        div {
+            class: "crop-shape-reminder",
+            position: "absolute",
+            top: rem(position.y),
+            left: rem(position.x),
+            font_size: rem(3.25),
+            display: "flex",
+            flex_direction: "column",
+            align_items: "end",
+            color: "#aaa",
+            white_space: "nowrap",
+            
+
+            div {
+                line_height: "1em",
+                padding: rem(padding),
+                Emoji { text: "🍈" }, Emoji { text: "🍈" }, br{},
+                Emoji { text: "🍈" }, Emoji { text: "🍈" },
+            }
+
+            div {
+                padding: rem(padding),
+                display: "flex",
+                flex_direction: "row",
+                align_items: "center",
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🌽" }, br{},
+                    Emoji { text: "🌽" },
+                },
+
+                {slash()}
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🌽" }, br{},
+                    Emoji { text: "🌽" }, br{},
+                    Emoji { text: "🌽" },
+                },
+            }
+
+            div {
+                padding: rem(padding),
+                display: "flex",
+                flex_direction: "row",
+                align_items: "center",
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🫐" }, br{},
+                    div {
+                        display: "flex",
+                        flex_direction: "row",
+                        div { width: "1.75em", " ", }, Emoji { text: "🫐" },
+                    }
+                },
+            }
+
+            div {
+                padding: rem(padding),
+                display: "flex",
+                flex_direction: "row",
+                align_items: "center",
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🍆" }, Emoji { text: "🍆" }, br{},
+                    Emoji { text: "🍆" }, Emoji { text: "" },
+                },
+
+                {slash()}
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🍆" }, Emoji { text: "🍆" }, br{},
+                    Emoji { text: "" }, Emoji { text: "🍆" },
+                },
+                
+                {slash()}
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "" }, Emoji { text: "🍆" }, br{},
+                    Emoji { text: "🍆" }, Emoji { text: "🍆" },
+                },
+
+                {slash()}
+
+                div {
+                    line_height: "1em",
+                    Emoji { text: "🍆" }, Emoji { text: "" }, br{},
+                    Emoji { text: "🍆" }, Emoji { text: "🍆" },
+                },
+            }
+        }
+    }
+}
+
+#[component]
 pub fn BoardComponent(
     position: Vec2,
     board: Board,
@@ -226,6 +338,8 @@ pub fn BoardComponent(
                 background_color: "#530",
                 border_radius: rem(card_width * CARD_BORDER_RADIUS_RATIO),
             },
+
+            CropShapeReminder { position: Vec2::new(56., 112.) }
 
             for depot in 0..NUM_DEPOTS {
                 if let Some(hint) = get_hint(depot) {
