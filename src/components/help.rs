@@ -91,7 +91,7 @@ pub fn Help(mut game_state: Signal<GameState>) -> Element {
                 }
 
                 p {
-                    "The ",Emph{"free cell"}," on the top-left may store a single card of any kind."
+                    "The ",Emph{"free cell"}," on the top-left may store 1 card of any kind."
                 }
 
                 p {
