@@ -219,7 +219,7 @@ impl GameState {
         if pos2.card_index != depot2.len() { return false; }
 
         let card = depot1[pos1.card_index];
-        let Some((role, ix)) = DepotRole::role_and_subindex(pos2.depot_index) else { return false };
+        let Some(role) = DepotRole::role(pos2.depot_index) else { return false };
 
         let history_len = self.history.len();
         match role {
