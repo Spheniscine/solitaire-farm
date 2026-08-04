@@ -69,7 +69,7 @@ pub fn Help(mut game_state: Signal<GameState>) -> Element {
 
     rsx! {
         div {
-            style: "display: flex; flex-direction: column; align-items: center; font-size: 3.25rem; color: #fff; padding: 4rem;",
+            style: "display: flex; flex-direction: column; align-items: center; font-size: 3.35rem; color: #fff; padding: 4rem;",
             class: "help",
 
             div {
