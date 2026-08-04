@@ -1,6 +1,5 @@
 use std::time::Duration;
 
-use dioxus::logger::tracing;
 use rand::{Rng, seq::SliceRandom};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
