@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use glam::Vec2;
 
-use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, FARM_HEIGHT, FARM_WIDTH, NUM_DEPOTS, Selection, Skin, to_farm_coords}};
+use crate::{components::{CARD_BORDER_RADIUS_RATIO, CARD_HEIGHT_RATIO, CardComponent, CardFrame, Emoji, Movement, rem}, game::{AnimationAct, AnimationKey, Board, BoardPos, Card, DepotRole, FARM_HEIGHT, FARM_WIDTH, NUM_DEPOTS, Selection, Skin, to_farm_coords}};
 
 #[component]
 pub fn BoardComponent(
@@ -12,6 +12,8 @@ pub fn BoardComponent(
     onclick: EventHandler<BoardPos>,
     #[props(default)]
     ondoubleclick: EventHandler<BoardPos>,
+    #[props(default)]
+    clear_selection: EventHandler<()>,
     #[props(default)]
     animation_key: AnimationKey,
     #[props(default)]
@@ -181,6 +183,33 @@ pub fn BoardComponent(
         rsx!{}
     };
 
+    let clear_selection_button = if matches!(board.selected, Some(Selection::Farm(_))) {
+        let mut pos = farm_pos;
+        pos.y -= 10.;
+        rsx! {
+            div {
+                position: "absolute",
+                top: rem(pos.y),
+                left: rem(pos.x),
+                display: "flex",
+                align_items: "center",
+                justify_content: "center",
+                class: "game-button",
+                height: rem(5.),
+                width: rem(5.),
+                onclick: move |_| {
+                    clear_selection.call(());
+                },
+
+                Emoji { 
+                    text: "❌"
+                }
+            }
+        }
+    } else {
+        rsx!{}
+    };
+
     rsx! {
         div {
             position: "absolute",
@@ -240,6 +269,7 @@ pub fn BoardComponent(
                 }
             }
 
+            {clear_selection_button},
             {money_symbol},
             {anims},
 

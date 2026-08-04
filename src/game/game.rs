@@ -266,4 +266,8 @@ impl GameState {
 
         if !self.is_busy() { LocalStorage.save_game_state(&self); }
     }
+
+    pub fn clear_selection(&mut self) {
+        self.board.selected = None;
+    }
 }

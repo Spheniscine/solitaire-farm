@@ -6,6 +6,7 @@ pub static EMOJI_MAP: phf::Map<&'static str, Asset> = phf_map! {
     "🌽" => asset!("/assets/emoji/emoji_u1f33d.svg"),
     "🫐" => asset!("/assets/emoji/emoji_u1fad0.svg"),
     "🍆" => asset!("/assets/emoji/emoji_u1f346.svg"),
+    "❌" => asset!("/assets/emoji/emoji_u274c.svg"),
 };
 
 #[component]

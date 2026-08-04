@@ -108,6 +108,7 @@ pub fn Hero() -> Element {
                     skin: st.skin,
                     onclick: move |pos| if clean {state.write().onclick(pos);},
                     ondoubleclick: move |pos| if clean {state.write().ondoubleclick(pos);},
+                    clear_selection: move |_| {state.write().clear_selection();},
                     animation_key: st.animation_key,
                     is_won: st.is_won(),
                     valid_crop_group_selected: st.valid_crop_group_selected()
