@@ -13,8 +13,6 @@ pub fn BoardComponent(
     #[props(default)]
     ondoubleclick: EventHandler<BoardPos>,
     #[props(default)]
-    oncontextmenu: EventHandler<BoardPos>,
-    #[props(default)]
     animation_key: AnimationKey,
     #[props(default)]
     is_won: bool,
@@ -119,7 +117,7 @@ pub fn BoardComponent(
         }
     };
 
-    let selection_color = if valid_crop_group_selected {"#0f0"} else {"#ff0"};
+    let selection_class = if valid_crop_group_selected {"selected-halo-valid"} else {"selected-halo"};
 
     let moving_card = |p1: Vec2, p2: Vec2, card: Card| rsx! {
         Movement {
@@ -195,9 +193,8 @@ pub fn BoardComponent(
                             left: rem(get_pos(depot, i).x),
                             width: rem(card_width),
                             height: rem(selected_height),
-                            background_color: selection_color,
                             border_radius: rem(card_width * CARD_BORDER_RADIUS_RATIO),
-                            class: "selected-halo",
+                            class: selection_class,
                         }
                     }
 

@@ -33,6 +33,10 @@ pub fn Hero() -> Element {
         }
     });
 
+    if st.is_acting() {
+        animate_timer.send(st.animation_key);
+    }
+
     rsx! {
         div {
             id: "hero",
@@ -104,10 +108,11 @@ pub fn Hero() -> Element {
                     position: Vec2 { x: 0., y: 20. },
                     board: st.board.clone(),
                     skin: st.skin,
-                    // onclick: move |pos| if clean {state.write().onclick(pos);},
-                    // ondoubleclick: move |pos| if clean {state.write().ondoubleclick(pos);},
+                    onclick: move |pos| if clean {state.write().onclick(pos);},
+                    ondoubleclick: move |pos| if clean {state.write().ondoubleclick(pos);},
                     animation_key: st.animation_key,
                     is_won: st.is_won(),
+                    valid_crop_group_selected: st.valid_crop_group_selected()
                 }
             }
         }

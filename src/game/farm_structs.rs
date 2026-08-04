@@ -14,6 +14,14 @@ impl Iterator for BitMask {
     }
 }
 impl BitMask {
+    pub fn single(x: usize) -> Self {
+        Self(1 << x)
+    }
+
+    pub fn is_empty(self) -> bool {
+        self.0 == 0
+    }
+
     pub fn contains(self, x: usize) -> bool {
         self.0 >> x & 1 == 1
     }

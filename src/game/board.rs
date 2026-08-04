@@ -90,7 +90,7 @@ pub enum AnimationAct {
     Move(Vec<Card>, BoardPos, BoardPos),
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum Selection {
     Stack(BoardPos),
     Farm(BitMask),
@@ -140,5 +140,9 @@ impl Board {
                 },
             }
         }
+    }
+
+    pub fn top_pos(&self, depot: usize) -> BoardPos {
+        BoardPos::new(depot, self.depots[depot].len())
     }
 }
