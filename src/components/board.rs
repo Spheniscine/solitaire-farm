@@ -156,6 +156,31 @@ pub fn BoardComponent(
         }
     });
 
+    let money_symbol = if valid_crop_group_selected {
+        let pos = get_pos(DepotRole::Market.id(0), 0);
+        rsx! {
+            div {
+                position: "absolute",
+                top: rem(pos.y),
+                left: rem(pos.x),
+                width: rem(card_width),
+                height: rem(card_height),
+                display: "flex",
+                align_items: "center",
+                justify_content: "center",
+                pointer_events: "none",
+                color: "#0f0",
+                font_size: rem(5.),
+                font_family: "'Noto Emoji'",
+                font_weight: "bold",
+
+                "💰"
+            }
+        }
+    } else {
+        rsx!{}
+    };
+
     rsx! {
         div {
             position: "absolute",
@@ -215,7 +240,8 @@ pub fn BoardComponent(
                 }
             }
 
-            {anims}
+            {money_symbol},
+            {anims},
 
             if is_won {
                 div {
