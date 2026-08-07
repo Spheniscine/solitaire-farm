@@ -3,7 +3,7 @@
 }
 
 html {
-    font-size: min(1vw, 0.5625vh);
+    font-size: min(1svw, 0.5625svh);
 }
 
 .select-none {
@@ -169,10 +169,10 @@ button {
    width: 1px;
 }
 
-.crop-shape-reminder table {
+/* .crop-shape-reminder table {
     border-spacing: 0;
     border-collapse: collapse;
 }
 .crop-shape-reminder td {
     padding: 0;
-}
+} */
