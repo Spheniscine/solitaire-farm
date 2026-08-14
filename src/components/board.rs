@@ -193,9 +193,11 @@ pub fn BoardComponent(
             DepotRole::Market => 
                 Some(
                     rsx!{
-                        span {
-                            font_family: "'Noto Emoji'",
-                            "💰"
+                        if !valid_crop_group_selected {
+                            span {
+                                font_family: "'Noto Emoji'",
+                                "💰"
+                            }
                         }
                     }
                 ),
