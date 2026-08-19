@@ -13,10 +13,7 @@ const KATEX_SUITS: Asset = asset!("/assets/KaTeX_Suits.woff2");
 // from https://www.confettijs.org/
 const CONFETTI_JS: Asset = asset!("/assets/confetti.min.js");
 
-// string inclusion is used to prevent FOUC;
-const _RAND_RECOMPILE: u64 = 0x4a2a5cf9126cd711; // comment and uncomment to force recompilation
-const MAIN_CSS: &str = const_css_minify::minify!("../assets/main.css");
-
+const MAIN_CSS: Asset = asset!("/assets/main.css");
 fn main() {
     dioxus::launch(App);
 }
@@ -38,9 +35,12 @@ fn App() -> Element {
             rel: "stylesheet",
         }
         document::Link { rel: "icon", href: FAVICON }
-        document::Style {{MAIN_CSS}}
         document::Style {
+            // visibility hidden to prevent FOUC, is set back to visible in MAIN_CSS
             r#"
+            html {{
+                visibility: hidden;
+            }}
             @font-face {{
                 font-family: KaTeX_Suits;
                 font-style: normal;
@@ -49,6 +49,7 @@ fn App() -> Element {
             }} 
             "#,
         }
+        document::Link { href: MAIN_CSS, rel: "stylesheet" }
         document::Script { src: CONFETTI_JS }
         Hero {}
 
