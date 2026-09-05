@@ -86,7 +86,7 @@ pub fn Help(mut game_state: Signal<GameState>) -> Element {
                 }
 
                 p {
-                    "Cards stack in the ", Emph{"tableau"}, " by ", Emph {"descending rank"}, " and " Emph {"unlike suit"},
+                    "Cards stack in the ", Emph{"tableau"}, " by ", Emph {"decrementing ranks"}, " and " Emph {"unlike suit"},
                     ". Such stacks of any size can be moved as a unit. (e.g. the stack ",{stack_example()},")."
                 }
 
